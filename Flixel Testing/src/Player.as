@@ -31,6 +31,8 @@ package
 			maxVelocity.x = runSpeed;
 			maxVelocity.y = 1000;
 			
+			allowCollisions = ANY;
+			
 			//animations
 			addAnimation("idle", [0]);
 			addAnimation("run", [1, 2, 3, 0], 12);
@@ -55,27 +57,14 @@ package
 				facing = RIGHT;
 				acceleration.x += drag.x;
 			}
-			if(FlxG.keys.justPressed("SPACE") && !velocity.y)
+			if (FlxG.keys.justPressed("SPACE") && this.isTouching(FLOOR)/*!velocity.y*/)
 			{
 				velocity.y = -_jumpPower;
 			}
-		}
-		
-		override public function kill():void
-		{
-			if(!alive)
-				return;
-			solid = false;
-			super.kill();
-			flicker(0);
-			exists = true;
-			visible = false;
-			/* can be used for tracking */
-			velocity.make();
-			acceleration.make();
-			/* animate screen */
-			FlxG.camera.shake(0.005,0.35);
-			FlxG.camera.flash(0xffd8eba2,0.35);
+			
+			if (this.x < 16) {
+				this.x = 16;
+			}
 		}
 	}
 }

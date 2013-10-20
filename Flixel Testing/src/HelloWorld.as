@@ -6,7 +6,7 @@ package
 	 * ...
 	 * @author Celestics
 	 */
-	public class HelloWorld  extends FlxGame
+	public class HelloWorld extends FlxGame
 	{
 		
 		public function HelloWorld() 

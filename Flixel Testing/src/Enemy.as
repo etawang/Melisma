@@ -28,22 +28,15 @@ package
 		public function Enemy(/*x:uint, y:uint*/) 
 		{
 			super(FlxG.width, 610, ImgEnemy);
-			this.velocity.x = -200;
-			mass = 20;
+			this.velocity.x = -100;
+			this.immovable = true;
 			allowCollisions = ANY;
 		}
 		
 		override public function update():void
 		{
-			this.velocity.x = -200;
-			//checkHealth();
 			super.update();
-		}
-		
-		public function checkHealth():void
-		{
-			if (this.x <= -50)
-			{
+			if (this.x <= -50) {
 				kill();
 			}
 		}

@@ -15,7 +15,7 @@ package
 		
 		//Timer for Event purposes.
 		public var timer:Number;
-		private static var DELAY:Number = 1.0;
+		private static var DELAY:Number = 0.5;
 		
 		//major game object storage
 		protected var _blocks:FlxGroup;
@@ -27,6 +27,10 @@ package
 		protected var _objects:FlxGroup;
 		protected var _hazards:FlxGroup;
 		
+		//HUD
+		protected var _hud:FlxGroup;
+		protected var _enemyCount:FlxText;
+		
 		override public function create():void
 		{
 			timer = 0.0;
@@ -37,11 +41,15 @@ package
 			_floor = new FlxGroup();
 			_blocks = new FlxGroup();
 			_enemies = new FlxGroup();
+			_hud = new FlxGroup();
 			
 			//Now that we have references to the bullets and metal bits,
 			//we can create the player object.
 			_player = new Player(316,300);
 
+			//HUD
+			_hud = new FlxGroup();
+			
 			//This refers to a custom function down at the bottom of the file
 			//that creates all our level geometry with a total size of 640x480.
 			//This in turn calls buildRoom() a bunch of times, which in turn
@@ -54,6 +62,12 @@ package
 			add(_floor);
 			add(_blocks);
 			add(_enemies);
+			add(_hud);
+			
+			//derp
+			_enemyCount = new FlxText(FlxG.width/2, 500, 100, "DERP");
+			_hud.add(_enemyCount);
+			add(_enemyCount);
 
 			//Then we add the player and set up the scrolling camera,
 			//which will automatically set the boundaries of the world.
@@ -91,10 +105,11 @@ package
 			super.update();
 
 			//collisions with environment
-			FlxG.collide(_blocks, _objects);
-			FlxG.collide(_enemies, _floor);
+			FlxG.collide(_blocks, _player);
+			//FlxG.collide(_enemies, _floor);
 			FlxG.collide(_enemies,_player);
-			FlxG.collide(_enemies,_enemies);
+			//FlxG.collide(_enemies, _enemies);
+			
 			//FlxG.overlap(_enemies, _player, overlapped);
 			
 			timer += FlxG.elapsed;
@@ -102,10 +117,17 @@ package
 			if (timer >= DELAY)
 			{
 				timer -= DELAY;
-				var e:Enemy = _enemies.recycle(Enemy) as Enemy;
-				if (e == null) { return; }
-				e.y = 608-(20*util.nextRandom());
+				var e:Enemy = _enemies.getFirstAvailable() as Enemy;
+				if (e == null) {
+					e = _enemies.recycle(Enemy) as Enemy;
+				}
+				e.reset(FlxG.width, util.nextRandom());
+				//if (e == null) { return; }
+				e.velocity.x = -100;
+				e.y = 608-(200*util.nextRandom());
 				add(e);
+				
+				_enemyCount.text = ""+_enemies.length;
 			}
 		}
 
@@ -113,7 +135,7 @@ package
 		protected function overlapped(Sprite1:FlxSprite,Sprite2:FlxSprite):void
 		{
 			FlxG.flash(0xff131c1b);
-			Sprite2.acceleration.x = -400;
+			//Sprite2.acceleration.x = -400;
 		}
 		
 		//These next two functions look crazy, but all they're doing is generating
@@ -124,11 +146,11 @@ package
 			var b:FlxTileblock;
 
 			//First, we create the walls, ceiling and floors:
-			b = new FlxTileblock(0,0,640,16);
+			b = new FlxTileblock(0, 0, 640, 16);
 			b.loadTiles(ImgTech);
 			_blocks.add(b);
 			
-			b = new FlxTileblock(0,16,16,640-16);
+			b = new FlxTileblock(0, 16, 16, 640 - 16);
 			b.loadTiles(ImgTech);
 			_blocks.add(b);
 
