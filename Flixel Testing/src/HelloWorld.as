@@ -11,7 +11,7 @@ package
 		
 		public function HelloWorld() 
 		{
-			super(640,480,MenuState,1); //Create a new FlxGame object at 640x480 with 1x pixels, then load PlayState
+			super(640,480,MenuState,1, 40); //Create a new FlxGame object at 640x480 with 1x pixels, then load MenuState
 		}
 		
 	}

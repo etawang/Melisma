@@ -31,6 +31,13 @@ package
 		protected var _hud:FlxGroup;
 		protected var _enemyCount:FlxText;
 		
+		//music info object
+		private var music:MusicAnalyzer;
+		
+		public function PlayState(myMusic:MusicAnalyzer) {
+			music = myMusic;
+		}
+		
 		override public function create():void
 		{
 			timer = 0.0;
@@ -84,6 +91,8 @@ package
 			_objects.add(_player);
 			
 			FlxG.flash(0xff131c1b);
+			
+			music.playSong();
 		}
 
 		override public function destroy():void
@@ -114,7 +123,7 @@ package
 			
 			timer += FlxG.elapsed;
 			
-			if (timer >= DELAY)
+			if (music.returnBeats()[0] != 0 && timer >= DELAY) 
 			{
 				timer -= DELAY;
 				var e:Enemy = _enemies.getFirstAvailable() as Enemy;
