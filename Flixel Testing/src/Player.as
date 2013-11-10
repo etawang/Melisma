@@ -14,7 +14,7 @@ package
 		public function Player(X:int,Y:int)
 		{
 			super(X,Y);
-			loadGraphic(ImgPlayer,true,true,34,32);
+			loadGraphic(ImgPlayer,true,false,34,32);
 			_restart = 0;
 			
 			//bounding box tweaks
@@ -34,7 +34,7 @@ package
 			allowCollisions = ANY;
 			
 			//animations
-			addAnimation("idle", [2]);
+			addAnimation("idle", [3,4,0,1,2], 12);
 			addAnimation("run", [3, 4, 0, 1, 2], 12);
 		}
 
@@ -57,7 +57,7 @@ package
 				facing = RIGHT;
 				acceleration.x += drag.x;
 			}
-			if (FlxG.keys.justPressed("SPACE") && this.isTouching(FLOOR)/*!velocity.y*/)
+			if (FlxG.keys.pressed("SPACE") && this.isTouching(FLOOR)/*!velocity.y*/)
 			{
 				velocity.y = -_jumpPower;
 			}

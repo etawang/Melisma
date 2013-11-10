@@ -5,7 +5,7 @@ package
 	public class PlayState extends FlxState
 	{
 		//Tile Testing.
-		[Embed(source = "../assets/sprites/EnemyTest.png")] private var ImgTech:Class
+		[Embed(source = "../assets/sprites/EnemyTest1.png")] private var ImgTech:Class
 		
 		//UTILITY CLASS
 		public static var util:Utility = new Utility(0.1);

@@ -16,7 +16,7 @@ package
 		/** ALL STATIC VARIABLES **/
 		
 		//Enemy Image.
-		[Embed(source = "../assets/sprites/PlatformTest.png")] private var ImgEnemy:Class
+		[Embed(source = "../assets/sprites/note3.png")] private var ImgEnemy:Class
 		
 		//Movement data.
 		private static var X_SPEED:int = 5;
