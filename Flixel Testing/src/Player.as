@@ -5,7 +5,7 @@ package
 	public class Player extends FlxSprite
 	{
 		//Player Image.
-		[Embed(source = "../assets/sprites/runner_strip1.png")] private var ImgPlayer:Class
+		[Embed(source = "../assets/sprites/player_all1.png")] private var ImgPlayer:Class
 
 		protected var _jumpPower:int;
 		protected var _restart:Number;
@@ -34,8 +34,10 @@ package
 			allowCollisions = ANY;
 			
 			//animations
-			addAnimation("idle", [3,4,0,1,2], 12);
+			addAnimation("idle", [3, 4, 0, 1, 2], 12);
 			addAnimation("run", [3, 4, 0, 1, 2], 12);
+			addAnimation("jump", [5, 6], 12)
+			addAnimation("fall", [7, 8], 12);
 		}
 
 		override public function destroy():void
@@ -62,14 +64,25 @@ package
 				velocity.y = -_jumpPower;
 			}
 			
-			if (velocity.x)
+			//Change animation
+			if (velocity.x && this.isTouching(FLOOR))
 			{
 				play("run");
+			}
+			else if (velocity.y < 0)
+			{
+				play("jump");
+			}
+			else if (velocity.y > 0)
+			{
+				play("fall");
 			}
 			else 
 			{
 				play("idle");
 			}
+			
+			
 			if (this.x < 16) {
 				this.x = 16;
 			}
