@@ -40,6 +40,8 @@ package
 		
 		override public function create():void
 		{
+			FlxG.bgColor = 0xFF0044DD;
+			
 			timer = 0.0;
 			
 			FlxG.mouse.hide();
@@ -126,15 +128,18 @@ package
 			if (music.returnBeats()[0] != 0 && timer >= DELAY) 
 			{
 				timer -= DELAY;
-				var e:Enemy = _enemies.getFirstAvailable() as Enemy;
-				if (e == null) {
-					e = _enemies.recycle(Enemy) as Enemy;
+				for (var blks:int = 1; blks > 0; blks--)
+				{
+					var e:Enemy = _enemies.getFirstAvailable() as Enemy;
+					if (e == null) {
+						e = _enemies.recycle(Enemy) as Enemy;
+					}
+					e.reset(FlxG.width, util.nextRandom());
+					//if (e == null) { return; }
+					e.velocity.x = -100;
+					e.y = 608-(500*util.nextRandom());
+					add(e);
 				}
-				e.reset(FlxG.width, util.nextRandom());
-				//if (e == null) { return; }
-				e.velocity.x = -100;
-				e.y = 608-(200*util.nextRandom());
-				add(e);
 				
 				_enemyCount.text = ""+_enemies.length;
 			}

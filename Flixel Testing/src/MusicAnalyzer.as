@@ -16,7 +16,7 @@ package
 		
 		public function MusicAnalyzer() {
 			var s:String = "../assets/mp3/60bpmDrum.mp3";
-			myALF = new ALF(s, 0, 40, false, 20);
+			myALF = new ALF(s, 0, 60, false, 20);
 			myALF.addEventListener(myALF.FILE_LOADED, setIsLoaded);
 			myALF.addEventListener(myALF.FILE_COMPLETE, audioFinished);
 			//beats = myALF.getBeats(w, 1);

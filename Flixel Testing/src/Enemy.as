@@ -16,7 +16,7 @@ package
 		/** ALL STATIC VARIABLES **/
 		
 		//Enemy Image.
-		[Embed(source = "../assets/sprites/EnemyTest.png")] private var ImgEnemy:Class
+		[Embed(source = "../assets/sprites/PlatformTest.png")] private var ImgEnemy:Class
 		
 		//Movement data.
 		private static var X_SPEED:int = 5;
@@ -30,7 +30,7 @@ package
 			super(FlxG.width, 610, ImgEnemy);
 			this.velocity.x = -100;
 			this.immovable = true;
-			allowCollisions = ANY;
+			allowCollisions = UP;
 		}
 		
 		override public function update():void
