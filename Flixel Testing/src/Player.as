@@ -49,17 +49,18 @@ package
 		{
 			//MOVEMENT
 			acceleration.x = 0;
-			if(FlxG.keys.LEFT)
-			{
-				facing = LEFT;
-				acceleration.x -= drag.x;
-			}
-			else if(FlxG.keys.RIGHT)
+			if(FlxG.keys.D && !FlxG.keys.A)
 			{
 				facing = RIGHT;
 				acceleration.x += drag.x;
 			}
-			if (FlxG.keys.pressed("SPACE") && this.isTouching(FLOOR)/*!velocity.y*/)
+			else if(FlxG.keys.A && !FlxG.keys.D)
+			{
+				facing = LEFT;
+				acceleration.x -= drag.x;
+			}
+			if ((FlxG.keys.pressed("W") || FlxG.keys.pressed("SPACE")) &&
+				this.isTouching(FLOOR)/*!velocity.y*/)
 			{
 				velocity.y = -_jumpPower;
 			}

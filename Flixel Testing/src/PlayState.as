@@ -7,11 +7,14 @@ package
 		//Tile Testing.
 		[Embed(source = "../assets/sprites/EnemyTest1.png")] private var ImgTech:Class
 		
+		//Arrow Hit Box.
+		[Embed(source = "../assets/sprites/ArrowHitBox.png")] private var ImgArrowHitBox:Class
+		
 		//UTILITY CLASS
 		public static var util:Utility = new Utility(0.1);
 		
 		//Data on player and enemies.
-		public var player:Player;
+		private static var PLAYER_X:int = 150;
 		
 		//Timer for Event purposes.
 		public var timer:Number;
@@ -22,6 +25,7 @@ package
 		protected var _player:Player;
 		protected var _enemies:FlxGroup;
 		protected var _floor:FlxGroup;
+		protected var _arrowHitBox:FlxSprite;
 		
 		//meta groups, to help speed up collisions
 		protected var _objects:FlxGroup;
@@ -54,7 +58,7 @@ package
 			
 			//Now that we have references to the bullets and metal bits,
 			//we can create the player object.
-			_player = new Player(316,300);
+			_player = new Player(PLAYER_X,300);
 
 			//HUD
 			_hud = new FlxGroup();
@@ -73,7 +77,7 @@ package
 			add(_enemies);
 			add(_hud);
 			
-			//derp
+			////derp!
 			_enemyCount = new FlxText(FlxG.width/2, 500, 100, "DERP");
 			_hud.add(_enemyCount);
 			add(_enemyCount);
@@ -81,8 +85,24 @@ package
 			//Then we add the player and set up the scrolling camera,
 			//which will automatically set the boundaries of the world.
 			add(_player);
-			FlxG.camera.setBounds(0,0,640,640,true);
+			
+			
+			var camBreak:int = 420;
+			var playCam:FlxCamera = new FlxCamera(0, 0, 640, camBreak);
+			playCam.setBounds(0, 0, 640, 640, true);
+			playCam.follow(_player, FlxCamera.STYLE_PLATFORMER);
+			FlxG.addCamera(playCam);
+			
+			
+			var arrowCam:FlxCamera = new FlxCamera(0, camBreak, 640, 640);
+			arrowCam.setBounds(0, 640, 640, 640); // change 600 to 640 once arrows are added!   
+			FlxG.addCamera(arrowCam);
+			
+			
+			/* may remove this!
+			FlxG.camera.setBounds(0, 0, 640, 640, true);
 			FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
+			*/
 			
 			//Finally we are going to sort things into a couple of helper groups.
 			//We don't add these groups to the state, we just use them for collisions later!
@@ -125,6 +145,10 @@ package
 			
 			timer += FlxG.elapsed;
 			
+			//_player.x = PLAYER_X; - if we want to immobilize the player
+			
+			checkArrow();
+			
 			if (music.returnBeats()[0] != 0 && timer >= DELAY) 
 			{
 				timer -= DELAY;
@@ -144,6 +168,26 @@ package
 				_enemyCount.text = ""+_enemies.length;
 			}
 		}
+		
+		protected function checkArrow()
+		{
+			if (FlxG.keys.justPressed("LEFT"))
+			{
+				
+			}
+			if (FlxG.keys.justPressed("RIGHT"))
+			{
+				
+			}
+			if (FlxG.keys.justPressed("DOWN"))
+			{
+				
+			}
+			if (FlxG.keys.justPressed("UP"))
+			{
+				
+			}
+		}
 
 		//This is an overlap callback function, triggered by the calls to FlxU.overlap().
 		protected function overlapped(Sprite1:FlxSprite,Sprite2:FlxSprite):void
@@ -156,6 +200,9 @@ package
 		//the level structure and placing the enemy spawners.
 		protected function generateLevel():void
 		{
+			_arrowHitBox = new FlxSprite(20, 640, ImgArrowHitBox);
+			add(_arrowHitBox);
+			
 			var r:uint = 160;
 			var b:FlxTileblock;
 

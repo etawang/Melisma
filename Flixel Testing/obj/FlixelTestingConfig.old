@@ -8,15 +8,15 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>false</value>
-    </define>
-    <define append="true">
-      <name>CONFIG::release</name>
       <value>true</value>
     </define>
     <define append="true">
+      <name>CONFIG::release</name>
+      <value>false</value>
+    </define>
+    <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'11/10/2013'</value>
+      <value>'11/17/2013'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -30,21 +30,19 @@
       <name>CONFIG::desktop</name>
       <value>false</value>
     </define>
-    <optimize>true</optimize>
-    <omit-trace-statements>true</omit-trace-statements>
-    <verbose-stacktraces>false</verbose-stacktraces>
+    <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>C:\Users\Jun\Documents\GitHub\Melisma\Flixel Testing\src</path-element>
-      <path-element>C:\Users\Jun\Documents\GitHub\Melisma\Flixel</path-element>
-      <path-element>C:\Users\Jun\Documents\GitHub\Melisma\ALF\Flash</path-element>
+      <path-element>C:\Users\Celestics\Documents\GitHub\Melisma\Flixel Testing\src</path-element>
+      <path-element>C:\Users\Celestics\Documents\GitHub\Melisma\Flixel</path-element>
+      <path-element>C:\Users\Celestics\Documents\GitHub\Melisma\ALF\Flash</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <include-libraries>
-      <library>C:\Users\Jun\Documents\GitHub\Melisma\ALF\Flash\ALFPackage.swc</library>
+      <library>C:\Users\Celestics\Documents\GitHub\Melisma\ALF\Flash\ALFPackage.swc</library>
     </include-libraries>
   </compiler>
   <file-specs>
-    <path-element>C:\Users\Jun\Documents\GitHub\Melisma\Flixel Testing\src\HelloWorld.as</path-element>
+    <path-element>C:\Users\Celestics\Documents\GitHub\Melisma\Flixel Testing\src\HelloWorld.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>
