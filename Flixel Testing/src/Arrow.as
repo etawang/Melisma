@@ -16,7 +16,7 @@ package
 		private var myDirection:int;
 		
 		public function Arrow() {
-			super(FlxG.width, 0);
+			super(FlxG.width, 600);
 			loadGraphic(ImgArrow, true, false);
 			this.velocity.x = -100;	
 			this.myDirection = 0;
@@ -45,7 +45,7 @@ package
 			}
 		}
 		
-		public function newArrow(x:uint, y:uint, r):void
+		public function newArrow(x:uint, y:uint, r:Number):void
 		{
 			reset(x, y);
 			myDirection = (int)(4 * r);

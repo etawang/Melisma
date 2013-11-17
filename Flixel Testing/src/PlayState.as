@@ -18,9 +18,9 @@ package
 		
 		//Timer for Event purposes.
 		public var timer:Number;
-		private static var MUSIC_DELAY:Number = 0.5;
 		//platforms will appear every 0.75 seconds; we can randomize this
-		private static var PLATFORM_SPACING:Number = 0.75; 
+		private static var PLATFORM_SPACING:Number = 0.85; 
+		private static var ARROW_SPACING:Number = 0.5;
 		private static var DELAY:Number = 0.5;
 		
 		//major game object storage
@@ -41,6 +41,7 @@ package
 		
 		//music info object
 		private var music:MusicAnalyzer;
+		private var arrowSpawnTime:Number;
 		private var platformSpawnTime:Number;
 		private var prevY:Number=550;
 		
@@ -83,6 +84,7 @@ package
 			add(_blocks);
 			add(_enemies);
 			add(_hud);
+			add(_arrows);
 			
 			////derp!
 			_enemyCount = new FlxText(FlxG.width/2, 500, 100, "DERP");
@@ -122,6 +124,7 @@ package
 			FlxG.flash(0xff131c1b);
 			
 			platformSpawnTime = 0;
+			arrowSpawnTime = 0;
 			
 			music.playSong();
 		}
@@ -156,7 +159,7 @@ package
 			
 			checkArrow();
 			
-			if (music.returnBeats()[0] != 0 && timer >= DELAY && FlxG.elapsed >= MUSIC_DELAY) 
+			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
 			{
 				//timer -= MUSIC_DELAY;
 				for (var blks:int = 1; blks > 0; blks--)
@@ -165,9 +168,11 @@ package
 					if (a == null) {
 						a = _arrows.recycle(Arrow) as Arrow;
 					}
-					a.newArrow(FlxG.width, 0, util.nextRandom());
+					a.newArrow(640, 650, util.nextRandom());
 				}
-				
+				a.velocity.x = -100;
+				arrowSpawnTime = timer;
+				add(a);
 			}
 			if ((timer >= DELAY) && ((timer-platformSpawnTime) >= PLATFORM_SPACING)) {
 				var e:Enemy = _enemies.getFirstAvailable() as Enemy;
@@ -184,7 +189,6 @@ package
 				
 				//var newY:Number = _player.getY() + (dir)(20 * util.nextRandom());
 				var newY:Number = prevY + (dir * (50 * util.nextRandom()));
-				_enemyCount.text = "" + prevY;
 				if (newY <= 64) { 
 					e.y = 32;
 				}
@@ -206,19 +210,19 @@ package
 		{
 			if (FlxG.keys.justPressed("LEFT"))
 			{
-				
+				_enemyCount.text = "LEFT";
 			}
 			if (FlxG.keys.justPressed("RIGHT"))
 			{
-				
+				_enemyCount.text = "RIGHT";
 			}
 			if (FlxG.keys.justPressed("DOWN"))
 			{
-				
+				_enemyCount.text = "DOWN";
 			}
 			if (FlxG.keys.justPressed("UP"))
 			{
-				
+				_enemyCount.text = "UP";
 			}
 		}
 
