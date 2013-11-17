@@ -11,6 +11,7 @@ package
 		//Raw String Input.
 		public var rawData:String = "";
 		
+		protected var originalTime:int = FlxU.getTicks();
 		
 		//music management
 		protected var myMusic:MusicAnalyzer;
@@ -23,8 +24,11 @@ package
 		override public function create():void
 		{
 			//Initialize after load.
-			var text:FlxText = new FlxText(220, 210, 300, "Press Enter to Continue...", true);
-			text.size = 14;
+			var screenWidth = FlxG.width;
+			var screenHeight = FlxG.height;
+			
+			var text:FlxText = new FlxText((screenWidth/2)-75, (screenHeight/2), 150, "Loading", true);
+			text.setFormat(null, 24, 0xFFFFFF, "center");
 			add(text);
 			
 			//collect beat info for a song
@@ -34,7 +38,7 @@ package
 		//Waits for input to go to the stage.
 		override public function update():void
 		{
-			if (FlxG.keys.ENTER && myMusic.audioIsLoaded())
+			if (myMusic.audioIsLoaded() && (FlxU.getTicks()>=(originalTime+3000)))
 			{
 				FlxG.switchState(new PlayState(myMusic));
 			}
