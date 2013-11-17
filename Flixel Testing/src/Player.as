@@ -39,6 +39,12 @@ package
 			addAnimation("jump", [5, 6], 12)
 			addAnimation("fall", [7, 8], 12);
 		}
+		
+		public function isJumping():int 
+		{
+			return (int)(velocity.y < 0);
+		}
+
 
 		override public function destroy():void
 		{

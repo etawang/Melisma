@@ -18,6 +18,9 @@ package
 		
 		//Timer for Event purposes.
 		public var timer:Number;
+		private static var MUSIC_DELAY:Number = 0.5;
+		//platforms will appear every 0.75 seconds; we can randomize this
+		private static var PLATFORM_SPACING:Number = 0.75; 
 		private static var DELAY:Number = 0.5;
 		
 		//major game object storage
@@ -25,6 +28,7 @@ package
 		protected var _player:Player;
 		protected var _enemies:FlxGroup;
 		protected var _floor:FlxGroup;
+		protected var _arrows:FlxGroup;
 		protected var _arrowHitBox:FlxSprite;
 		
 		//meta groups, to help speed up collisions
@@ -37,6 +41,8 @@ package
 		
 		//music info object
 		private var music:MusicAnalyzer;
+		private var platformSpawnTime:Number;
+		private var prevY:Number=550;
 		
 		public function PlayState(myMusic:MusicAnalyzer) {
 			music = myMusic;
@@ -55,6 +61,7 @@ package
 			_blocks = new FlxGroup();
 			_enemies = new FlxGroup();
 			_hud = new FlxGroup();
+			_arrows = new FlxGroup();
 			
 			//Now that we have references to the bullets and metal bits,
 			//we can create the player object.
@@ -114,6 +121,8 @@ package
 			
 			FlxG.flash(0xff131c1b);
 			
+			platformSpawnTime = 0;
+			
 			music.playSong();
 		}
 
@@ -145,28 +154,52 @@ package
 			
 			timer += FlxG.elapsed;
 			
-			//_player.x = PLAYER_X; - if we want to immobilize the player
-			
 			checkArrow();
 			
-			if (music.returnBeats()[0] != 0 && timer >= DELAY) 
+			if (music.returnBeats()[0] != 0 && timer >= DELAY && FlxG.elapsed >= MUSIC_DELAY) 
 			{
-				timer -= DELAY;
+				//timer -= MUSIC_DELAY;
 				for (var blks:int = 1; blks > 0; blks--)
 				{
-					var e:Enemy = _enemies.getFirstAvailable() as Enemy;
-					if (e == null) {
-						e = _enemies.recycle(Enemy) as Enemy;
+					var a:Arrow = _arrows.getFirstAvailable() as Arrow;
+					if (a == null) {
+						a = _arrows.recycle(Arrow) as Arrow;
 					}
-					e.reset(FlxG.width, util.nextRandom());
-					//if (e == null) { return; }
-					e.velocity.x = -100;
-					e.y = 608-(500*util.nextRandom());
-					add(e);
+					a.newArrow(FlxG.width, 0, util.nextRandom());
 				}
 				
-				_enemyCount.text = ""+_enemies.length;
 			}
+			if ((timer >= DELAY) && ((timer-platformSpawnTime) >= PLATFORM_SPACING)) {
+				var e:Enemy = _enemies.getFirstAvailable() as Enemy;
+				if (e == null) {
+					e = _enemies.recycle(Enemy) as Enemy;
+				}
+				e.reset(FlxG.width, util.nextRandom());
+				//if (e == null) { return; }
+				e.velocity.x = -100;
+				var dir:int = ((int)(util.nextRandom() * 2));
+				if (dir == 0) {
+					dir--;
+				}
+				
+				//var newY:Number = _player.getY() + (dir)(20 * util.nextRandom());
+				var newY:Number = prevY + (dir * (50 * util.nextRandom()));
+				_enemyCount.text = "" + prevY;
+				if (newY <= 64) { 
+					e.y = 32;
+				}
+				else if (newY >= (640 - 58)) { 
+					e.y = 640 - 58;
+				}
+				else {
+					e.y = newY;
+				} 
+				prevY = e.y;
+				platformSpawnTime = timer;
+				add(e);
+			}
+			
+			//_player.x = PLAYER_X; - if we want to immobilize the player
 		}
 		
 		protected function checkArrow()
