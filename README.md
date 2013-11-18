@@ -1,6 +1,24 @@
 Melisma
 =======
+Event IDs-
 1: tatum
 2: beat
 3: measure
 4: section
+
+
+TODO
+
+Flixel/ActionScript:
+0) read in music data
+1) red fire from behind
+2) lives
+3) arrow key checking
+4) background graphics based on song section
+5) instructions
+6) end screen
+
+Website:
+0) reload the swf when a version corresponding to the uploaded song is compiled
+1) show loading animation for when a song is processing - maybe have it cover the game in a 
+	semi-transparent layer that goes away when the correct instance of the game is loaded?
