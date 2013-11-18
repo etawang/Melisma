@@ -1,0 +1,20 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	new file:   Flixel Testing/assets/sprites/button1.png
+#	new file:   Flixel Testing/assets/sprites/buttontest.png
+#	new file:   Flixel Testing/assets/sprites/cursor1.png
+#	modified:   Flixel Testing/bin/FlixelTesting.swf
+#	modified:   Flixel Testing/obj/FlixelTestingConfig.old
+#	modified:   Flixel Testing/obj/FlixelTestingConfig.xml
+#	new file:   Flixel Testing/src/CustomButton.as
+#	new file:   Flixel Testing/src/Instructions.as
+#	modified:   Flixel Testing/src/LoadState.as
+#	modified:   Flixel Testing/src/MenuState.as
+#	new file:   Flixel Testing/src/OptionMenu.as
+#
+

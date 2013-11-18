@@ -10,6 +10,7 @@ package
 	public class MenuState extends FlxState
 	{
 		public var buttons:Array;
+		public var buttonFuncs:Array;
 		public var currentButton:int;
 
 		override public function create():void
@@ -26,42 +27,31 @@ package
 			
 			currentButton = 0;
 			
-			var play:FlxText = new FlxText((screenWidth / 2) - 100, (screenHeight / 2), 200, "PLAY", true);
-			play.setFormat(null, 18, 0xFFFFFF, "center", 0x000000);
-			add(play);
+			var playButton:FlxText = new FlxText((screenWidth / 2) - 100, (screenHeight / 2), 200, "PLAY", true);
+			playButton.setFormat(null, 18, 0xFFFFFF, "center", 0x000000);
+			add(playButton);
 			
-			var instructions:FlxText = new FlxText((screenWidth / 2) - 100, (screenHeight / 2) + 75, 200, "INSTRUCTIONS", true);
-			instructions.setFormat(null, 18, 0xFFFFFF, "center", 0x000000);
-			add(instructions);
+			var instructionsButton:FlxText = new FlxText((screenWidth / 2) - 100, (screenHeight / 2) + 75, 200, "INSTRUCTIONS", true);
+			instructionsButton.setFormat(null, 18, 0xFFFFFF, "center", 0x000000);
+			add(instructionsButton);
 			
-			buttons = [play, instructions];
-			
-			
-			//add(play);
-			//var playButton:FlxButton = new FlxButton((screenWidth / 2), (screenHeight / 2), "Play", play);
-			//add(playButton);	
+			buttons = [playButton, instructionsButton];
+			buttonFuncs = [play, instructions];
 		}
 		
 		
 		override public function update():void
 		{
-			var len:int = buttons.length;
+			var cb = buttons[currentButton];
 			
-			if (FlxG.keys.ENTER || FlxG.mouse.justPressed() )
+			if (FlxG.keys.justPressed("ENTER") || (FlxG.mouse.justPressed() && mouseInBox(cb.x, cb.x + cb.width, cb.y , cb.y + cb.height)))
 			{
-				//Hacky; fix later
-				if (currentButton == 0)
-				{
-					play();
-				}
-				if (currentButton == 1)
-				{
-					instructions();
-				}
+				var func:Function = buttonFuncs[currentButton];
+				if (func != null) func();
 			}
 			else if (FlxG.keys.DOWN)
 			{
-				if (currentButton < len - 1)
+				if (currentButton < buttons.length - 1)
 				{
 					currentButton++;
 				}
@@ -78,31 +68,44 @@ package
 				}
 				//else
 				//{
-					//currentButton = buttons.length;
+					//currentButton = buttons.length-1;
 				//}
 			}
 			
-			var mouseX:int = FlxG.mouse.x;
-			var mouseY:int = FlxG.mouse.y;
+			updateButtons();
+		}
+		
+		public function updateButtons():void
+		{
+			var len:int = buttons.length;
 			
 			for (var i:int = 0; i < len; i++) {
 				var b:FlxText = buttons[i];
-				if (mouseX >= b.x && mouseX <= b.x + b.width && mouseY >= b.y && mouseY <= b.y + b.height)
+				if (mouseInBox(b.x, b.x + b.width, b.y , b.y + b.height))
 				{
 					currentButton = i;
 					break;
 				}
 			}
 			
-			for (var i:int = 0; i < len; i++) {
-				if (i == currentButton) {
-					buttons[i].setFormat(null, 20, 0x66AAFF, "center", 0x66AAFF);
+			for (var j:int = 0; j < len; j++) {
+				if (j == currentButton) {
+					buttons[j].setFormat(null, 20, 0x66AAFF, "center", 0x66AAFF);
 				}
 				else 
 				{
-					buttons[i].setFormat(null, 18, 0xFFFFFF, "center", 0x000000);
+					buttons[j].setFormat(null, 18, 0xFFFFFF, "center", 0x000000);
 				}
 			}
+		}
+		
+		public function mouseInBox(left:Number, right:Number, top:Number, bottom:Number):Boolean
+		{
+			var mouseX:int = FlxG.mouse.x;
+			var mouseY:int = FlxG.mouse.y;
+			
+			if (mouseX >= left && mouseX <= right && mouseY >= top && mouseY <= bottom) return true;
+			else return false;
 		}
 		
 		public function play():void

@@ -24,8 +24,8 @@ package
 		override public function create():void
 		{
 			//Initialize after load.
-			var screenWidth = FlxG.width;
-			var screenHeight = FlxG.height;
+			var screenWidth:uint = FlxG.width;
+			var screenHeight:uint = FlxG.height;
 			
 			var text:FlxText = new FlxText((screenWidth/2)-75, (screenHeight/2), 150, "Loading", true);
 			text.setFormat(null, 24, 0xFFFFFF, "center");
