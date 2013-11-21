@@ -10,14 +10,14 @@ package
 	 */
 	public class Arrow extends FlxSprite
 	{
-		[Embed(source = "../assets/sprites/player_all1.png")] private var ImgArrow:Class
+		[Embed(source = "../assets/sprites/arrowstrip1.png")] private var ImgArrow:Class
 		
 		//0 is left, 1 is up, 2 is right, 3 is down
 		private var myDirection:int;
 		
 		public function Arrow() {
 			super(FlxG.width, 600);
-			loadGraphic(ImgArrow, true, false);
+			loadGraphic(ImgArrow, true, false, 41.5, 40);
 			this.velocity.x = -100;	
 			this.myDirection = 0;
 			
@@ -27,6 +27,11 @@ package
 			addAnimation("down", [3]);
 			addAnimation("hit", [/*stuff*/], 12, false);
 			addAnimation("miss", [/*stuff*/], 12, false);
+			allowCollisions = ANY;
+		}
+		
+		public function getDirection() : int {
+			return myDirection;
 		}
 		
 		public function arrowHit() {
@@ -41,6 +46,7 @@ package
 		{
 			super.update();
 			if (this.x <= -50) {
+				//something to move fire forward
 				kill();
 			}
 		}

@@ -136,6 +136,7 @@ package
 			_blocks = null;
 			_player = null;
 			_enemies = null;
+			_arrows = null;
 
 			//meta groups, to help speed up collisions
 			_objects = null;
@@ -153,11 +154,10 @@ package
 			FlxG.collide(_enemies,_player);
 			//FlxG.collide(_enemies, _enemies);
 			
-			//FlxG.overlap(_enemies, _player, overlapped);
-			
+			FlxG.overlap(_arrowHitBox, _arrows, overlapped); //not working
 			timer += FlxG.elapsed;
 			
-			checkArrow();
+			//checkArrow();
 			
 			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
 			{
@@ -203,34 +203,48 @@ package
 				add(e);
 			}
 			
-			//_player.x = PLAYER_X; - if we want to immobilize the player
+			_player.x = PLAYER_X; //- if we want to immobilize the player
 		}
 		
-		protected function checkArrow()
+		//only called by overlapped, given the overlapping arrow
+		protected function checkArrow(arrow:Arrow):void
 		{
+			var dir = arrow.getDirection();
 			if (FlxG.keys.justPressed("LEFT"))
 			{
+				if (dir == 0) {
+					arrow.kill();
+				}
 				_enemyCount.text = "LEFT";
 			}
 			if (FlxG.keys.justPressed("RIGHT"))
 			{
+				if (dir == 2) {
+					arrow.kill();
+				}
 				_enemyCount.text = "RIGHT";
 			}
 			if (FlxG.keys.justPressed("DOWN"))
 			{
+				if (dir == 3) {
+					arrow.kill();
+				}
 				_enemyCount.text = "DOWN";
 			}
 			if (FlxG.keys.justPressed("UP"))
 			{
+				if (dir == 1) {
+					arrow.kill();
+				}
 				_enemyCount.text = "UP";
 			}
 		}
 
-		//This is an overlap callback function, triggered by the calls to FlxU.overlap().
-		protected function overlapped(Sprite1:FlxSprite,Sprite2:FlxSprite):void
+		//This is an overlap callback function, triggered by the calls to FlxG.overlap().
+		protected function overlapped(Sprite1:FlxSprite,Sprite2:Arrow)
 		{
 			FlxG.flash(0xff131c1b);
-			//Sprite2.acceleration.x = -400;
+			checkArrow(Sprite2);
 		}
 		
 		//These next two functions look crazy, but all they're doing is generating
