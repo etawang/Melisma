@@ -240,7 +240,6 @@ package
 		//This is an overlap callback function, triggered by the calls to FlxG.overlap().
 		protected function overlapped(Sprite1:FlxSprite, Sprite2:FlxSprite)
 		{
-			FlxG.flash(0xff131c1b);
 			//prevArrowKey set in update function!
 			checkArrow((Arrow)(Sprite2));
 		}
