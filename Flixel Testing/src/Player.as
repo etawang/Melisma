@@ -30,7 +30,6 @@ package
 			_jumpPower = 800;
 			maxVelocity.x = runSpeed;
 			maxVelocity.y = 1000;
-			
 			allowCollisions = ANY;
 			
 			//animations

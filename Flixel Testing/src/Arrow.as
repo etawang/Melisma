@@ -10,23 +10,34 @@ package
 	 */
 	public class Arrow extends FlxSprite
 	{
-		[Embed(source = "../assets/sprites/player_all1.png")] private var ImgArrow:Class
+		[Embed(source = "../assets/sprites/arrowstrip1.png")] private var ImgArrow:Class
 		
-		//0 is left, 1 is up, 2 is right, 3 is down
+		//data for arrow directions
+		public static var ARROW_UP:int = 0;
+		public static var ARROW_DOWN:int = 1;
+		public static var ARROW_LEFT:int = 2;
+		public static var ARROW_RIGHT:int = 3;
+		
+		//current direction of this arrow
 		private var myDirection:int;
 		
 		public function Arrow() {
 			super(FlxG.width, 600);
-			loadGraphic(ImgArrow, true, false);
+			loadGraphic(ImgArrow, true, false, 41.5, 40);
 			this.velocity.x = -100;	
 			this.myDirection = 0;
 			
-			addAnimation("left", [0]);
-			addAnimation("up", [1]);
-			addAnimation("right", [2]);
-			addAnimation("down", [3]);
+			addAnimation("up", [0]);
+			addAnimation("down", [1]);
+			addAnimation("left", [2]);
+			addAnimation("right", [3]);
 			addAnimation("hit", [/*stuff*/], 12, false);
 			addAnimation("miss", [/*stuff*/], 12, false);
+			allowCollisions = ANY;
+		}
+		
+		public function getDirection() : int {
+			return myDirection;
 		}
 		
 		public function arrowHit() {
@@ -41,6 +52,7 @@ package
 		{
 			super.update();
 			if (this.x <= -50) {
+				//something to move fire forward
 				kill();
 			}
 		}
@@ -49,16 +61,16 @@ package
 		{
 			reset(x, y);
 			myDirection = (int)(4 * r);
-			if (myDirection == 0) {
+			if (myDirection == ARROW_LEFT) {
 				play("left");
 			}
-			else if (myDirection == 1) {
+			else if (myDirection == ARROW_UP) {
 				play("up");
 			}
-			else if (myDirection == 2) {
+			else if (myDirection == ARROW_RIGHT) {
 				play("right");
 			}
-			else if (myDirection == 3) {
+			else if (myDirection == ARROW_DOWN) {
 				play("down");
 			}
 		}
