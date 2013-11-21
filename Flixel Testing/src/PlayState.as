@@ -8,7 +8,7 @@ package
 		[Embed(source = "../assets/sprites/EnemyTest1.png")] private var ImgTech:Class
 		
 		//Arrow Hit Box.
-		[Embed(source = "../assets/sprites/ArrowHitBox.png")] private var ImgArrowHitBox:Class
+		[Embed(source = "../assets/sprites/arrowbox1.png")] private var ImgArrowHitBox:Class
 		
 		//UTILITY CLASS
 		public static var util:Utility = new Utility(0.1);
@@ -22,6 +22,9 @@ package
 		private static var PLATFORM_SPACING:Number = 0.85; 
 		private static var ARROW_SPACING:Number = 0.5;
 		private static var DELAY:Number = 0.5;
+		
+		//arrow data fields
+		private var prevArrowKey:int = 0;
 		
 		//major game object storage
 		protected var _blocks:FlxGroup;
@@ -126,6 +129,8 @@ package
 			platformSpawnTime = 0;
 			arrowSpawnTime = 0;
 			
+			FlxG.worldBounds = new FlxRect(0, 0, 700, 700);
+			
 			music.playSong();
 		}
 
@@ -154,11 +159,26 @@ package
 			FlxG.collide(_enemies,_player);
 			//FlxG.collide(_enemies, _enemies);
 			
-			FlxG.overlap(_arrowHitBox, _arrows, overlapped); //not working
-			timer += FlxG.elapsed;
-			
+			if (FlxG.keys.justPressed("LEFT")) {
+				prevArrowKey = Arrow.ARROW_LEFT;
+				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
+			}
+			if (FlxG.keys.justPressed("UP")) {
+				prevArrowKey = Arrow.ARROW_UP;
+				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
+			}
+			if (FlxG.keys.justPressed("RIGHT")) {
+				prevArrowKey = Arrow.ARROW_RIGHT;
+				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
+			}
+			if (FlxG.keys.justPressed("DOWN")) {
+				prevArrowKey = Arrow.ARROW_DOWN;
+				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
+			}
+			//FlxG.overlap(_arrowHitBox, _arrows, overlapped);
 			//checkArrow();
 			
+			timer += FlxG.elapsed;
 			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
 			{
 				//timer -= MUSIC_DELAY;
@@ -209,42 +229,20 @@ package
 		//only called by overlapped, given the overlapping arrow
 		protected function checkArrow(arrow:Arrow):void
 		{
-			var dir = arrow.getDirection();
-			if (FlxG.keys.justPressed("LEFT"))
-			{
-				if (dir == 0) {
-					arrow.kill();
-				}
-				_enemyCount.text = "LEFT";
-			}
-			if (FlxG.keys.justPressed("RIGHT"))
-			{
-				if (dir == 2) {
-					arrow.kill();
-				}
-				_enemyCount.text = "RIGHT";
-			}
-			if (FlxG.keys.justPressed("DOWN"))
-			{
-				if (dir == 3) {
-					arrow.kill();
-				}
-				_enemyCount.text = "DOWN";
-			}
-			if (FlxG.keys.justPressed("UP"))
-			{
-				if (dir == 1) {
-					arrow.kill();
-				}
-				_enemyCount.text = "UP";
+			var dir:int = arrow.getDirection();
+			_enemyCount.text = "FAILED! " + prevArrowKey;
+			if(dir == prevArrowKey) {
+				arrow.kill();
+				_enemyCount.text = "SUCCESS! " + prevArrowKey;
 			}
 		}
 
 		//This is an overlap callback function, triggered by the calls to FlxG.overlap().
-		protected function overlapped(Sprite1:FlxSprite,Sprite2:Arrow)
+		protected function overlapped(Sprite1:FlxSprite, Sprite2:FlxSprite)
 		{
 			FlxG.flash(0xff131c1b);
-			checkArrow(Sprite2);
+			//prevArrowKey set in update function!
+			checkArrow((Arrow)(Sprite2));
 		}
 		
 		//These next two functions look crazy, but all they're doing is generating
