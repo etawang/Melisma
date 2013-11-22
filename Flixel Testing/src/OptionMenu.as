@@ -10,8 +10,8 @@ package
 	{
 		override public function create():void
 		{
-			var screenWidth = FlxG.width;
-			var screenHeight = FlxG.height;
+			var screenWidth:int = FlxG.width;
+			var screenHeight:int = FlxG.height;
 			
 			var title:FlxText = new FlxText((screenWidth/2)-100, (screenHeight/2)-150, 200, "Melisma", true);
 			title.setFormat(null, 38, 0xFFFFFF, "center", 0x0033FF);

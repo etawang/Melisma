@@ -33,14 +33,25 @@ package
 		protected var _floor:FlxGroup;
 		protected var _arrows:FlxGroup;
 		protected var _arrowHitBox:FlxSprite;
+		protected var _arrowFailBox:FlxSprite;
 		
 		//meta groups, to help speed up collisions
 		protected var _objects:FlxGroup;
 		protected var _hazards:FlxGroup;
 		
+		//cameras
+		var playCam:FlxCamera;
+		var arrowCam:FlxCamera;
+		
 		//HUD
 		protected var _hud:FlxGroup;
 		protected var _enemyCount:FlxText;
+		//optional scoring text field
+		private var _scorefield:FlxText;
+		protected static var ARROW_BASE_SCORE = 50;
+		private var score:Number;
+		private var _arrowstreakfield:FlxText;
+		private var arrowStreak:uint;
 		
 		//music info object
 		private var music:MusicAnalyzer;
@@ -93,6 +104,14 @@ package
 			_enemyCount = new FlxText(FlxG.width/2, 500, 100, "DERP");
 			_hud.add(_enemyCount);
 			add(_enemyCount);
+			score = 0;
+			arrowStreak = 0;
+			_scorefield = new FlxText(_arrowHitBox.x+(_arrowHitBox.width)+10, 685, 480, "SCORE: " + score, true);
+			_scorefield.setFormat(null, 8, 0xFFFFFF, "left", 0x0000FF);
+			add(_scorefield);
+			_arrowstreakfield = new FlxText(_scorefield.x, _scorefield.y-40, 480, "STREAK: " + arrowStreak, true);
+			_arrowstreakfield.setFormat(null, 8, 0xFFFFFF, "left", 0x0000FF);
+			add(_arrowstreakfield);
 
 			//Then we add the player and set up the scrolling camera,
 			//which will automatically set the boundaries of the world.
@@ -100,21 +119,15 @@ package
 			
 			
 			var camBreak:int = 420;
-			var playCam:FlxCamera = new FlxCamera(0, 0, 640, camBreak);
+			playCam = new FlxCamera(0, 0, 640, camBreak);
 			playCam.setBounds(0, 0, 640, 640, true);
 			playCam.follow(_player, FlxCamera.STYLE_PLATFORMER);
 			FlxG.addCamera(playCam);
 			
 			
-			var arrowCam:FlxCamera = new FlxCamera(0, camBreak, 640, 640);
+			arrowCam = new FlxCamera(0, camBreak, 640, 640);
 			arrowCam.setBounds(0, 640, 640, 640); // change 600 to 640 once arrows are added!   
 			FlxG.addCamera(arrowCam);
-			
-			
-			/* may remove this!
-			FlxG.camera.setBounds(0, 0, 640, 640, true);
-			FlxG.camera.follow(_player, FlxCamera.STYLE_PLATFORMER);
-			*/
 			
 			//Finally we are going to sort things into a couple of helper groups.
 			//We don't add these groups to the state, we just use them for collisions later!
@@ -129,7 +142,7 @@ package
 			platformSpawnTime = 0;
 			arrowSpawnTime = 0;
 			
-			FlxG.worldBounds = new FlxRect(0, 0, 700, 700);
+			FlxG.worldBounds = new FlxRect(-100, 0, 700, 700);
 			
 			music.playSong();
 		}
@@ -175,8 +188,16 @@ package
 				prevArrowKey = Arrow.ARROW_DOWN;
 				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
 			}
-			//FlxG.overlap(_arrowHitBox, _arrows, overlapped);
-			//checkArrow();
+			
+			FlxG.overlap(_arrowFailBox, _arrows, arrowFailFunc);
+			
+			if (score < 0)
+			{
+				score = 0;
+			}
+			
+			_scorefield.text = "SCORE: " + score;
+			_arrowstreakfield.text = "STREAK: " + arrowStreak;
 			
 			timer += FlxG.elapsed;
 			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
@@ -189,6 +210,7 @@ package
 						a = _arrows.recycle(Arrow) as Arrow;
 					}
 					a.newArrow(640, 650, util.nextRandom());
+					a.setProcessed(false);
 				}
 				a.velocity.x = -100;
 				arrowSpawnTime = timer;
@@ -229,11 +251,22 @@ package
 		//only called by overlapped, given the overlapping arrow
 		protected function checkArrow(arrow:Arrow):void
 		{
+			if (arrow.isProcessed()) {
+				return;
+			}
+			arrow.setProcessed(true);
 			var dir:int = arrow.getDirection();
-			_enemyCount.text = "FAILED! " + prevArrowKey;
 			if(dir == prevArrowKey) {
 				arrow.kill();
-				_enemyCount.text = "SUCCESS! " + prevArrowKey;
+				arrowStreak += 1;
+				var dist:Number = (_arrowHitBox.width/2)-FlxU.abs(_arrowHitBox.x - arrow.x);
+				var scoreDiff:Number = ARROW_BASE_SCORE * (dist / (_arrowHitBox.width / 2));
+				score += FlxU.round(arrowStreak*scoreDiff) + 1;
+				_enemyCount.text = "SUCCESS: DIFF = " + dist;
+			}
+			else {
+				score -= ARROW_BASE_SCORE;
+				resetArrowStreak();
 			}
 		}
 
@@ -244,12 +277,29 @@ package
 			checkArrow((Arrow)(Sprite2));
 		}
 		
+		//did not hit the arrow, do this
+		protected function arrowFailFunc(Sprite1:FlxSprite, Sprite2:FlxSprite)
+		{
+			Sprite2.kill();
+			score -= ARROW_BASE_SCORE;
+			resetArrowStreak();
+		}
+		
+		protected function resetArrowStreak():void
+		{
+			if(arrowStreak != 0) {
+				arrowCam.flash(0x111111, 0.5);
+			}
+			arrowStreak = 0;
+		}
+		
 		//These next two functions look crazy, but all they're doing is generating
 		//the level structure and placing the enemy spawners.
 		protected function generateLevel():void
 		{
 			_arrowHitBox = new FlxSprite(20, 640, ImgArrowHitBox);
 			add(_arrowHitBox);
+			_arrowFailBox = new FlxSprite( -50, _arrowHitBox.y);
 			
 			var r:uint = 160;
 			var b:FlxTileblock;

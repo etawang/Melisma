@@ -20,12 +20,16 @@ package
 		
 		//current direction of this arrow
 		private var myDirection:int;
+		private var processed:Boolean;
 		
 		public function Arrow() {
 			super(FlxG.width, 600);
 			loadGraphic(ImgArrow, true, false, 41.5, 40);
 			this.velocity.x = -100;	
 			this.myDirection = 0;
+			
+			myDirection = 0;
+			processed = false;
 			
 			addAnimation("up", [0]);
 			addAnimation("down", [1]);
@@ -51,7 +55,7 @@ package
 		override public function update():void
 		{
 			super.update();
-			if (this.x <= -50) {
+			if (this.x <= -200) {
 				//something to move fire forward
 				kill();
 			}
@@ -75,6 +79,15 @@ package
 			}
 		}
 
+		public function setProcessed(b:Boolean):void
+		{
+			processed = b;
+		}
+
+		public function isProcessed():Boolean
+		{
+			return processed;
+		}
 	}
 	
 	
