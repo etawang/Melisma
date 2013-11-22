@@ -101,6 +101,9 @@ package
 		}
 		public function loseLife():void {
 			lives--;
+			//if (lives <= 0) {
+			//	FlxG.switchState(new LoseState());
+			//}
 		}
 	}
 }

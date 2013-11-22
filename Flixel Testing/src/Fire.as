@@ -13,12 +13,12 @@ package
 		[Embed(source = "../assets/sprites/bg/left.png")] private var ImgFire:Class
 		
 		public function Fire() {
-			super(-80, 0);
-			loadGraphic(ImgFire, true, false, 82, 640);
+			super(-240, 0);
+			loadGraphic(ImgFire, true, false, 240, 640);
 			//this.velocity.x = 5;	
 			//this.myDirection = 0;
 			
-			width = 80;
+			width = 240;
 			height = 640;
 			offset.x = 0;
 			offset.y = 0;
