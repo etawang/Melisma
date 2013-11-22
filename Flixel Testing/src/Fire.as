@@ -14,9 +14,14 @@ package
 		
 		public function Fire() {
 			super(-80, 0);
-			loadGraphic(ImgFire, true, false, 80, 640);
+			loadGraphic(ImgFire, true, false, 82, 640);
 			//this.velocity.x = 5;	
 			//this.myDirection = 0;
+			
+			width = 80;
+			height = 640;
+			offset.x = 0;
+			offset.y = 0;
 			
 			addAnimation("burn", [0, 1, 2], 12);
 			play("burn");

@@ -259,6 +259,7 @@ package
 				else {
 					e.y = newY;
 				} 
+				_enemyCount.text = "platform height" + prevY;
 				prevY = e.y;
 				platformSpawnTime = timer;
 				add(e);
@@ -281,7 +282,7 @@ package
 				var dist:Number = (_arrowHitBox.width)-FlxU.abs(_arrowHitBox.x - arrow.x);
 				var scoreDiff:Number = ARROW_BASE_SCORE * (dist / (_arrowHitBox.width / 2));
 				score += FlxU.round(arrowStreak*scoreDiff) + 1;
-				_enemyCount.text = "DIFF = " + dist;
+				//_enemyCount.text = "DIFF = " + dist;
 				_fire.x -= 20;
 			}
 			else {
