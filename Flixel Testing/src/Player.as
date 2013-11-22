@@ -9,6 +9,7 @@ package
 
 		protected var _jumpPower:int;
 		protected var _restart:Number;
+		protected var lives:int;
 		
 		//This is the player object class.
 		public function Player(X:int,Y:int)
@@ -16,6 +17,7 @@ package
 			super(X,Y);
 			loadGraphic(ImgPlayer,true,false,34,32);
 			_restart = 0;
+			lives = 3;
 			
 			//bounding box tweaks
 			width = 32;
@@ -93,6 +95,12 @@ package
 			if (this.x < 16) {
 				this.x = 16;
 			}
+		}
+		public function getLives():int {
+			return lives;
+		}
+		public function loseLife():void {
+			lives--;
 		}
 	}
 }

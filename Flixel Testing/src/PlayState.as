@@ -22,6 +22,7 @@ package
 		private static var PLATFORM_SPACING:Number = 0.85; 
 		private static var ARROW_SPACING:Number = 0.5;
 		private static var DELAY:Number = 0.5;
+		private static var FIRE_DELAY:Number = 5;
 		
 		//arrow data fields
 		private var prevArrowKey:int = 0;
@@ -34,6 +35,7 @@ package
 		protected var _arrows:FlxGroup;
 		protected var _arrowHitBox:FlxSprite;
 		protected var _arrowFailBox:FlxSprite;
+		protected var _fire:Fire;
 		
 		//meta groups, to help speed up collisions
 		protected var _objects:FlxGroup;
@@ -57,7 +59,8 @@ package
 		private var music:MusicAnalyzer;
 		private var arrowSpawnTime:Number;
 		private var platformSpawnTime:Number;
-		private var prevY:Number=550;
+		private var prevY:Number = 550;
+		private var deathTime:Number = 0;
 		
 		public function PlayState(myMusic:MusicAnalyzer) {
 			music = myMusic;
@@ -80,7 +83,8 @@ package
 			
 			//Now that we have references to the bullets and metal bits,
 			//we can create the player object.
-			_player = new Player(PLAYER_X,300);
+			_player = new Player(PLAYER_X, 300);
+			_fire = new Fire();
 
 			//HUD
 			_hud = new FlxGroup();
@@ -116,7 +120,7 @@ package
 			//Then we add the player and set up the scrolling camera,
 			//which will automatically set the boundaries of the world.
 			add(_player);
-			
+			add(_fire);
 			
 			var camBreak:int = 420;
 			playCam = new FlxCamera(0, 0, 640, camBreak);
@@ -155,6 +159,7 @@ package
 			_player = null;
 			_enemies = null;
 			_arrows = null;
+			_fire = null;
 
 			//meta groups, to help speed up collisions
 			_objects = null;
@@ -171,6 +176,14 @@ package
 			//FlxG.collide(_enemies, _floor);
 			FlxG.collide(_enemies,_player);
 			//FlxG.collide(_enemies, _enemies);
+			
+			if ((timer - deathTime) >= FIRE_DELAY) {
+				FlxG.overlap(_fire, _player, fireCollide);
+				_fire.velocity.x = 10;
+			}
+			else if (_fire.x > 0) {
+				_fire.velocity.x = -30;
+			}
 			
 			if (FlxG.keys.justPressed("LEFT")) {
 				prevArrowKey = Arrow.ARROW_LEFT;
@@ -269,6 +282,7 @@ package
 				var scoreDiff:Number = ARROW_BASE_SCORE * (dist / (_arrowHitBox.width / 2));
 				score += FlxU.round(arrowStreak*scoreDiff) + 1;
 				_enemyCount.text = "DIFF = " + dist;
+				_fire.x -= 20;
 			}
 			else {
 				score -= ARROW_BASE_SCORE;
@@ -281,6 +295,17 @@ package
 		{
 			//prevArrowKey set in update function!
 			checkArrow((Arrow)(Sprite2));
+		}
+		
+		protected function fireCollide(Sprite1:FlxSprite, playerSprite:FlxSprite):void
+		{
+			_player.y = 300;
+			_player.loseLife();
+			prevY = 550;
+			deathTime = timer;
+			//reset fires
+			_fire.velocity.x = -30;
+			
 		}
 		
 		//did hit the arrow, do this
