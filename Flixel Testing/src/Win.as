@@ -23,7 +23,7 @@ package
 			scale.y = 2;
 			
 			//animations
-			addAnimation("default", [0, 1, 2], 12);
+			addAnimation("default", [0, 1], 12);
 			play("default");
 		}
 

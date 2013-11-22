@@ -6,7 +6,7 @@ package
 	{
 		protected var _winner:Lose;
 		
-		//Win Screen.
+		//Lose Screen.
 		private static var loseImg:Lose;
 		private var TEXTa:FlxText;
 		private var restart:FlxText;
@@ -37,6 +37,12 @@ package
 			{
 				FlxG.switchState(new MenuState());
 			}
+		}
+		
+		override public function destroy():void
+		{
+			super.destroy();
+			loseImg = null;
 		}
 	}
 

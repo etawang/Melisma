@@ -38,6 +38,12 @@ package
 				FlxG.switchState(new MenuState());
 			}
 		}
+		
+		override public function destroy():void
+		{
+			super.destroy();
+			winImg = null;
+		}
 	}
 
 }
