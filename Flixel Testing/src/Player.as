@@ -68,6 +68,7 @@ package
 				this.isTouching(FLOOR)/*!velocity.y*/)
 			{
 				velocity.y = -_jumpPower;
+				PlayState.util.nextRandom();
 			}
 			
 			//Change animation

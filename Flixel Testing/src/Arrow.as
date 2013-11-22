@@ -78,6 +78,12 @@ package
 				play("down");
 			}
 		}
+		
+		override public function kill():void
+		{
+			//need to create a shadow here
+			super.kill();
+		}
 
 		public function setProcessed(b:Boolean):void
 		{

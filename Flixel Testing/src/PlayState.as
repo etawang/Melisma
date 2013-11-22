@@ -177,14 +177,20 @@ package
 				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
 			}
 			if (FlxG.keys.justPressed("UP")) {
+				PlayState.util.nextRandom();
 				prevArrowKey = Arrow.ARROW_UP;
 				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
 			}
 			if (FlxG.keys.justPressed("RIGHT")) {
+				PlayState.util.nextRandom();
+				PlayState.util.nextRandom();
 				prevArrowKey = Arrow.ARROW_RIGHT;
 				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
 			}
 			if (FlxG.keys.justPressed("DOWN")) {
+				PlayState.util.nextRandom();
+				PlayState.util.nextRandom();
+				PlayState.util.nextRandom();
 				prevArrowKey = Arrow.ARROW_DOWN;
 				FlxG.overlap(_arrowHitBox, _arrows, overlapped);
 			}
@@ -197,7 +203,7 @@ package
 			}
 			
 			_scorefield.text = "SCORE: " + score;
-			_arrowstreakfield.text = "STREAK: " + arrowStreak;
+			_arrowstreakfield.text = "STREAK: x" + arrowStreak;
 			
 			timer += FlxG.elapsed;
 			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
@@ -258,11 +264,11 @@ package
 			var dir:int = arrow.getDirection();
 			if(dir == prevArrowKey) {
 				arrow.kill();
-				arrowStreak += 1;
-				var dist:Number = (_arrowHitBox.width/2)-FlxU.abs(_arrowHitBox.x - arrow.x);
+				arrowSuccFunc();
+				var dist:Number = (_arrowHitBox.width)-FlxU.abs(_arrowHitBox.x - arrow.x);
 				var scoreDiff:Number = ARROW_BASE_SCORE * (dist / (_arrowHitBox.width / 2));
 				score += FlxU.round(arrowStreak*scoreDiff) + 1;
-				_enemyCount.text = "SUCCESS: DIFF = " + dist;
+				_enemyCount.text = "DIFF = " + dist;
 			}
 			else {
 				score -= ARROW_BASE_SCORE;
@@ -277,6 +283,15 @@ package
 			checkArrow((Arrow)(Sprite2));
 		}
 		
+		//did hit the arrow, do this
+		protected function arrowSuccFunc()
+		{
+			arrowStreak += 1;
+			if (arrowStreak % 50 == 0) {
+				arrowCam.flash(0xffffffff, 0.3, null, true);
+			}
+		}
+		
 		//did not hit the arrow, do this
 		protected function arrowFailFunc(Sprite1:FlxSprite, Sprite2:FlxSprite)
 		{
@@ -288,7 +303,7 @@ package
 		protected function resetArrowStreak():void
 		{
 			if(arrowStreak != 0) {
-				arrowCam.flash(0x111111, 0.5);
+				arrowCam.flash(0x111111, 0.5, null, true);
 			}
 			arrowStreak = 0;
 		}

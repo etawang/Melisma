@@ -39,7 +39,6 @@ package
 			buttonFuncs = [play, instructions];
 		}
 		
-		
 		override public function update():void
 		{
 			var cb = buttons[currentButton];
