@@ -62,8 +62,35 @@ package
 		private var prevY:Number = 550;
 		private var deathTime:Number = 0;
 		
-		public function PlayState(myMusic:MusicAnalyzer) {
+		private var tune:String;
+		private var events:Array;
+		private var ind:int;
+		
+		public function PlayState(myMusic:MusicAnalyzer, tn:String, evts:String) {
 			music = myMusic;
+			ind = 0;
+			if(tune != null && events != null) {
+				tune = tn;
+				events = parseEvents(evts);
+			}
+			else {
+				events = new Array(0);
+			}
+		}
+		
+		private function parseEvents(evts:String):Array
+		{
+			var evtStr:String = evts.substring(1, evts.length-1) //remove outer brackets
+			var eventPrim:Array = evtStr.split("/, /"); //split into "[time, type]"
+			var ret:Array = new Array(eventPrim.length);
+			for (var i:int = 0; i < eventPrim.length; i++) {
+				var temp:String = eventPrim[i].toString();
+				var stripped:String = temp.substring(1, temp.length - 1); //"time, type"
+				var tt:Array = stripped.split(", ");
+				var retElem:GameEvent = new GameEvent(int(tt[1]), new Number(tt[0]));
+				ret[i] = retElem;
+			}
+			return ret;
 		}
 		
 		override public function create():void
@@ -219,6 +246,27 @@ package
 			_arrowstreakfield.text = "STREAK: x" + arrowStreak;
 			
 			timer += FlxG.elapsed;
+			
+			if (ind < events.length) {
+				var temp:GameEvent = (GameEvent)(events[ind]);
+				while (temp.timestamp <= timer) {
+					for (var blks:int = 1; blks > 0; blks--)
+					{
+						var a:Arrow = _arrows.getFirstAvailable() as Arrow;
+						if (a == null) {
+							a = _arrows.recycle(Arrow) as Arrow;
+						}
+						a.newArrow(640, 650, util.nextRandom());
+						a.setProcessed(false);
+					}
+					a.velocity.x = -100;
+					//arrowSpawnTime = timer;
+					add(a);
+					ind += 1;
+					temp = (GameEvent)(events[ind]);
+				}
+			}
+			/*
 			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
 			{
 				//timer -= MUSIC_DELAY;
@@ -235,6 +283,7 @@ package
 				arrowSpawnTime = timer;
 				add(a);
 			}
+			*/
 			if ((timer >= DELAY) && ((timer-platformSpawnTime) >= PLATFORM_SPACING)) {
 				var e:Enemy = _enemies.getFirstAvailable() as Enemy;
 				if (e == null) {

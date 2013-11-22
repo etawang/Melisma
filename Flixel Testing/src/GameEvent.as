@@ -9,19 +9,15 @@ package
 	public class GameEvent extends FlxObject
 	{
 		//Type String.
-		public var type:String; //either "bullet" or "section"
+		public var type:int; //one of 4 types
 		
 		//Number Timestamp.
 		public var timestamp:Number; //time of occurrence
 		
-		//Number Array of size 2.
-		public var data:Array;
-		
-		public function GameEvent(t:String, ti:Number, d:Array) 
+		public function GameEvent(t:int, ti:Number) 
 		{
 			type = t;
 			timestamp = ti;
-			data = d;
 		}
 	}
 

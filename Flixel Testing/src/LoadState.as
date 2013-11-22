@@ -2,6 +2,7 @@ package
 {
 	import org.flixel.*;
 	import org.flixel.system.FlxList;
+	import flash.display.LoaderInfo;
 	/**
 	 * ...
 	 * @author Celestics
@@ -11,6 +12,9 @@ package
 		//Raw String Input.
 		public var rawData:String = "";
 		
+		public var tune:String;
+		public var events:String;
+		
 		protected var originalTime:int = FlxU.getTicks();
 		
 		//music management
@@ -18,7 +22,15 @@ package
 		
 		public function LoadState()
 		{
-			
+			var params:Object = LoaderInfo(FlxG.stage.root.loaderInfo).parameters;
+			if (params.tune != null && params.events != null) {
+				tune = params.tune.toString();
+				events = params.events.toString();
+			}
+			else {
+				tune = null;
+				events = null;
+			}
 		}
 		
 		override public function create():void
@@ -40,7 +52,7 @@ package
 		{
 			if (myMusic.audioIsLoaded() && (FlxU.getTicks()>=(originalTime+3000)))
 			{
-				FlxG.switchState(new PlayState(myMusic));
+				FlxG.switchState(new PlayState(myMusic, tune, events));
 			}
 		}
 	}
