@@ -24,9 +24,9 @@ package
 			
 			
 			var s:String =
-				"Try to survive until the end of the song by avoiding the floor and danger zone!\n\n" +
-				"Press the arrow keys as they align with the diamond on the bottom bar to prevent the danger zone from growing...\n\n" +
-				"...And manage your character by jumping to avoid falling to your death! Good Luck!\n";
+				"Try to survive until the end of the song by avoiding the floor and fire!\n\n" +
+				"Press the correct arrow key as it passes through the diamond to prevent the fire from approaching...\n\n" +
+				"...while jumping along notes to avoid falling to your death! You get 3 tries. Good luck!\n";
 			var text:FlxText = new FlxText(30, title.y+50, 480, s, true);
 			text.setFormat(null, 14, 0xFFFFFF, "left");
 			add(text);
