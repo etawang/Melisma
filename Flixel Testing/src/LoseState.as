@@ -11,7 +11,7 @@ package
 		private var TEXTa:FlxText;
 		private var restart:FlxText;
 		
-		public function LoseState() 
+		public function LoseState(myMusic:MusicAnalyzer) 
 		{
 			FlxG.bgColor = 0xFF0044DD;
 			var width:Number = FlxG.width;
@@ -28,6 +28,7 @@ package
 						
 			add(TEXTa);
 			add(restart);
+			myMusic.stopSong();
 			
 		}
 		

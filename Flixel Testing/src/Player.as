@@ -99,11 +99,11 @@ package
 		public function getLives():int {
 			return lives;
 		}
-		public function loseLife():void {
+		public function loseLife(myMusic:MusicAnalyzer):void {
 			lives--;
-			//if (lives <= 0) {
-			//	FlxG.switchState(new LoseState());
-			//}
+			if (lives <= 0) {
+				FlxG.switchState(new LoseState(myMusic));
+			}
 		}
 	}
 }

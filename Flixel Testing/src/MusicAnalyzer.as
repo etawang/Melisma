@@ -15,7 +15,9 @@ package
 		private var w:Array = [1, 1, 1, 1, 1, 1, 1]; //couldn't figure out what the first argument for getBeats is supposed to be
 		
 		public function MusicAnalyzer() {
-			var s:String = "../assets/mp3/Billie Jean.mp3";
+			//var paramObj:Object = LoaderInfo(this.root.loaderInfo).parameters.tune;
+			//var s:String = String(paramObj);
+			var s:String = "Test.mp3";
 			myALF = new ALF(s, 0, 60, false, 20);
 			myALF.addEventListener(myALF.FILE_LOADED, setIsLoaded);
 			myALF.addEventListener(myALF.FILE_COMPLETE, audioFinished);
@@ -28,6 +30,10 @@ package
 		
 		public function playSong():void {
 			myALF.startAudio();
+		}
+		
+		public function stopSong():void {
+			myALF.stopAudio();
 		}
 		
 		public function returnBeats():Array {
