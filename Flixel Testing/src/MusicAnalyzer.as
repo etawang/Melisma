@@ -19,7 +19,7 @@ package
 		public function MusicAnalyzer() {
 			//var paramObj:Object = Application(FlexGlobals.topLevelApplication).parameters.tune;
 			//var s:String = String(paramObj);
-			var s:String = "tune.mp3";
+			var s:String = "Test.mp3";
 			myALF = new ALF(s, 0, 60, false, 20);
 			myALF.addEventListener(myALF.FILE_LOADED, setIsLoaded);
 			myALF.addEventListener(myALF.FILE_COMPLETE, audioFinished);

@@ -46,12 +46,12 @@ package
 			//var fileStream:FileStream = new FileStream();
 			//fileStream.open(file, FileMode.READ);
 			
-			var myTextLoader:URLLoader = new URLLoader();
-			trace("wtf");
+			//var myTextLoader:URLLoader = new URLLoader();
+			//trace("wtf");
 
-			myTextLoader.addEventListener(Event.COMPLETE, onLoaded);
+			//myTextLoader.addEventListener(Event.COMPLETE, onLoaded);
 
-			myTextLoader.load(new URLRequest("http://128.237.207.223/melisma/instances/cold_as_ice/events.txt"));
+			//myTextLoader.load(new URLRequest("http://128.237.207.223/melisma/instances/cold_as_ice/events.txt"));
 		}
 		
 		function onLoaded(e:Event):void {
@@ -68,9 +68,9 @@ package
 		//Waits for input to go to the stage.
 		override public function update():void
 		{
-			if (!dataLoaded) {
-				return;
-			}
+			//if (!dataLoaded) {
+			//	return;
+			//}
 			
 			if (myMusic.audioIsLoaded() && (FlxU.getTicks()>=(originalTime+3000)))
 			{

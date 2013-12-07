@@ -251,8 +251,8 @@ package
 			
 			timer += FlxG.elapsed;
 
-			//if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING)
-			if (foundBeat() && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING)
+			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING)
+			//if (foundBeat() && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING)
 			{
 				//timer -= MUSIC_DELAY;
 				for (var blks:int = 1; blks > 0; blks--)
