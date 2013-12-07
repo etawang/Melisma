@@ -47,15 +47,20 @@ package
 			//fileStream.open(file, FileMode.READ);
 			
 			var myTextLoader:URLLoader = new URLLoader();
+			trace("wtf");
 
 			myTextLoader.addEventListener(Event.COMPLETE, onLoaded);
 
-			myTextLoader.load(new URLRequest("events.txt"));
+			myTextLoader.load(new URLRequest("http://128.237.207.223/melisma/instances/cold_as_ice/events.txt"));
 		}
 		
 		function onLoaded(e:Event):void {
 			
-			beats = (int)(e.target.data.split(/\n/));
+			beats = e.target.data.split(/\n/);
+			for (var i = 0; i < beats.length; i++) {
+				beats[i] = Number(beats[i]);
+			}
+			//beats = beats.map(myFunction);
 			dataLoaded = true;
 			
 		}
