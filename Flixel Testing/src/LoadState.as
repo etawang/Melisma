@@ -68,9 +68,9 @@ package
 		//Waits for input to go to the stage.
 		override public function update():void
 		{
-			//if (!dataLoaded) {
-			//	return;
-			//}
+			if (!dataLoaded) {
+				return;
+			}
 			
 			if (myMusic.audioIsLoaded() && (FlxU.getTicks()>=(originalTime+3000)))
 			{
