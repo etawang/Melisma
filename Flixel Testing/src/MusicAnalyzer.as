@@ -2,6 +2,8 @@ package
 {
 	import org.flixel.*;
 	import flash.events.*;
+	//import mx.core.Application;
+	//import mx.core.FlexGlobals;
 
 	/**
 	 * ...
@@ -15,9 +17,9 @@ package
 		private var w:Array = [1, 1, 1, 1, 1, 1, 1]; //couldn't figure out what the first argument for getBeats is supposed to be
 		
 		public function MusicAnalyzer() {
-			var paramObj:Object = LoaderInfo(this.root.loaderInfo).parameters.tune;
-			var s:String = String(paramObj);
-			//var s:String = "Test.mp3";
+			//var paramObj:Object = Application(FlexGlobals.topLevelApplication).parameters.tune;
+			//var s:String = String(paramObj);
+			var s:String = "tune.mp3";
 			myALF = new ALF(s, 0, 60, false, 20);
 			myALF.addEventListener(myALF.FILE_LOADED, setIsLoaded);
 			myALF.addEventListener(myALF.FILE_COMPLETE, audioFinished);

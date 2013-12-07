@@ -2,6 +2,10 @@ package
 {
 	import org.flixel.*;
 	import org.flixel.system.FlxList;
+	import flash.events.*;
+	import flash.net.*;
+	import com.adobe.serialization.json.JSON;
+	
 	/**
 	 * ...
 	 * @author Celestics
@@ -15,6 +19,10 @@ package
 		
 		//music management
 		protected var myMusic:MusicAnalyzer;
+		
+		protected var beats:Array;
+		
+		private var dataLoaded:Boolean = false;
 		
 		public function LoadState()
 		{
@@ -33,14 +41,35 @@ package
 			
 			//collect beat info for a song
 			myMusic = new MusicAnalyzer();
+			//var file:File = File.documentsDirectory;
+			//file = file.resolvePath("datafile.txt");
+			//var fileStream:FileStream = new FileStream();
+			//fileStream.open(file, FileMode.READ);
+			
+			var myTextLoader:URLLoader = new URLLoader();
+
+			myTextLoader.addEventListener(Event.COMPLETE, onLoaded);
+
+			myTextLoader.load(new URLRequest("events.txt"));
 		}
 		
+		function onLoaded(e:Event):void {
+			
+			beats = (int)(e.target.data.split(/\n/));
+			dataLoaded = true;
+			
+		}
+			
 		//Waits for input to go to the stage.
 		override public function update():void
 		{
+			if (!dataLoaded) {
+				return;
+			}
+			
 			if (myMusic.audioIsLoaded() && (FlxU.getTicks()>=(originalTime+3000)))
 			{
-				FlxG.switchState(new PlayState(myMusic));
+				FlxG.switchState(new PlayState(myMusic, beats));
 			}
 		}
 	}

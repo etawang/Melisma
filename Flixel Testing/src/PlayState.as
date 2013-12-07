@@ -68,11 +68,15 @@ package
 		private var music:MusicAnalyzer;
 		private var arrowSpawnTime:Number;
 		private var platformSpawnTime:Number;
+		private var beatArray:Array;
 		private var prevY:Number = 550;
 		private var deathTime:Number = 0;
+		private var beatTolerance:Number = 0.1;
+		private var beatIndex:int = 0;
 		
-		public function PlayState(myMusic:MusicAnalyzer) {
+		public function PlayState(myMusic:MusicAnalyzer, myBeats:Array) {
 			music = myMusic;
+			beatArray = myBeats;
 		}
 		
 		override public function create():void
@@ -246,7 +250,9 @@ package
 			_arrowstreakfield.text = "STREAK: x" + arrowStreak;
 			
 			timer += FlxG.elapsed;
-			if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING) 
+
+			//if (music.returnBeats()[0] != 0 && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING)
+			if (foundBeat() && timer >= DELAY && (timer-arrowSpawnTime) >= ARROW_SPACING)
 			{
 				//timer -= MUSIC_DELAY;
 				for (var blks:int = 1; blks > 0; blks--)
@@ -293,6 +299,33 @@ package
 			}
 			
 			_player.x = PLAYER_X; //- if we want to immobilize the player
+		}
+		
+		protected function foundBeat() {
+			var poppedTime:Number = 0;
+			var nextTime:Number;
+			if (beatIndex < (beatArray.length - 1)) {
+				nextTime = beatArray[beatIndex];
+			}
+			else {
+				return false;
+			}
+			
+			while (beatIndex < (beatArray.length -1) && nextTime < timer) {
+				poppedTime = nextTime;
+				beatIndex++;
+				nextTime = beatArray[beatIndex];
+			}
+			
+			if ((timer - poppedTime) <= beatTolerance) {
+				return true;
+			}
+			else if ((nextTime - timer) <= beatTolerance) {
+				beatIndex++;
+				return true;
+			}
+			
+			return false;
 		}
 		
 		//only called by overlapped, given the overlapping arrow

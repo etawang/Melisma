@@ -45,7 +45,7 @@
     <option loadExterns="" />
     <option staticLinkRSL="True" />
     <option additional="" />
-    <option compilerConstants="" />
+    <option compilerConstants="NAMESPACE::swf-version,15" />
     <option minorVersion="" />
   </build>
   <!-- SWC Include Libraries -->
@@ -54,7 +54,7 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <!-- example: <element path="..." /> -->
+    <element path="lib" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>
